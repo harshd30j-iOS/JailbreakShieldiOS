@@ -1,260 +1,276 @@
-# JailbreakShield 🛡️
+# JailbreakShield
 
-**iOS Security Library — Jailbreak Detection & Screen Protection**
+**JailbreakShield** is a closed-source iOS security SDK that provides jailbreak detection and screen protection for your iOS application. It is distributed as a binary XCFramework — all internal implementation is compiled into the binary and is not accessible or readable by integrators.
 
-Created by **Harsh Dwivedi**
-Version: 1.0.0 | Platform: iOS 13+ | Language: Objective-C
-
----
-
-## What It Does
-
-JailbreakShield provides two main features:
-
-1. **Jailbreak Detection** — Detects 10+ types of jailbreak indicators
-2. **Screen Protection** — Blocks screenshots and screen recording
+> Built for iOS 13.0+ | Objective-C & Swift compatible | Distributed via Swift Package Manager
 
 ---
 
-## Files
+## What This SDK Does
+
+JailbreakShield provides two core security features:
+
+| Feature | Class | Purpose |
+|---|---|---|
+| Jailbreak Detection | `DTTJailbreakDetection` | Detects if the device is jailbroken using multiple layered checks |
+| Screen Protection | `ScreenProtectionManager` | Prevents screenshots and screen recordings from capturing app content |
+
+The SDK checks for modern jailbreak tools including Dopamine, palera1n, TrollStore, unc0ver, and others. Internal detection logic, file paths, and algorithm details are hidden inside the binary and are never exposed.
+
+---
+
+## Requirements
+
+- iOS 13.0 or later
+- Xcode 14 or later
+- Swift Package Manager
+
+---
+
+## Installation
+
+### Swift Package Manager (Recommended)
+
+1. Open your project in Xcode
+2. Go to **File → Add Package Dependencies**
+3. Paste this URL in the search field:
 
 ```
-JailbreakShield/
-├── JailbreakShield.h            ← Umbrella header (import just this)
-├── DTTJailbreakDetection.h      ← Public API for jailbreak detection
-├── DTTJailbreakDetection.m      ← Full implementation (hidden in binary)
-├── ScreenProtectionManager.h    ← Public API for screen protection
-└── ScreenProtectionManager.m    ← Full implementation (hidden in binary)
+https://github.com/harshd30j-iOS/JailbreakShieldiOS
 ```
+
+4. Select version **1.0.0** (Up to Next Major Version)
+5. Choose your app target under **Add to Project**
+6. Click **Add Package**
 
 ---
 
-## Integration
+## Usage
 
-### Option A — Direct files (add to your project)
-Drag all 5 files into your Xcode project.
+### Objective-C
 
-### Option B — SPM Binary (recommended — hides source)
-Add via Swift Package Manager using the XCFramework binary.
+Import the umbrella header at the top of your file:
+
+```objc
+#import <JailbreakShield/JailbreakShield.h>
+```
+
+### Swift
 
 ```swift
-// Package.swift
-.binaryTarget(
-    name: "JailbreakShield",
-    url: "https://github.com/YourUsername/JailbreakShield/releases/download/1.0.0/JailbreakShield.xcframework.zip",
-    checksum: "your_checksum_here"
-)
+import JailbreakShield
 ```
 
 ---
 
 ## Jailbreak Detection
 
-### Import
-```objc
-#import <JailbreakShield/JailbreakShield.h>
-// or
-#import "DTTJailbreakDetection.h"
-```
-
 ### Quick Check
+
+Returns `YES`/`true` immediately if the device is jailbroken.
+
+**Objective-C:**
 ```objc
 if ([DTTJailbreakDetection isDeviceJailbroken]) {
-    // block the app
+    // Device is jailbroken — take action
+    exit(0);
 }
 ```
 
-### Recommended — Comprehensive Check with Details
+**Swift:**
+```swift
+if DTTJailbreakDetection.isDeviceJailbroken() {
+    // Device is jailbroken — take action
+}
+```
+
+---
+
+### Comprehensive Check
+
+Returns a detailed result object with the trigger identifier and human-readable reason. Recommended for production use.
+
+**Objective-C:**
 ```objc
 JailbreakCheckResult *result = [DTTJailbreakDetection comprehensiveCheck];
 
 if (result.isJailbroken) {
-    NSLog(@"Blocked by: %@", result.triggerIdentifier);
+    NSLog(@"Jailbreak detected");
+    NSLog(@"Trigger: %@", result.triggerIdentifier);
     NSLog(@"Reason: %@", result.reason);
-    // Show alert and exit
+    // Block app access
 }
 ```
 
-### AppDelegate Example
-```objc
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+**Swift:**
+```swift
+let result = DTTJailbreakDetection.comprehensiveCheck()
 
-    [[ScreenProtectionManager sharedManager] setupProtectionForWindow:self.window];
-    [self.window makeKeyAndVisible];
-
-    if (TARGET_OS_SIMULATOR == 0) {
-        JailbreakCheckResult *result = [DTTJailbreakDetection comprehensiveCheck];
-        if (result.isJailbroken) {
-            [self showJailbreakAlertWithReason:result.reason];
-            return YES;
-        }
-    }
-
-    // Normal app launch...
-    return YES;
-}
-
-- (void)showJailbreakAlertWithReason:(NSString *)reason {
-    UIAlertController *alert = [UIAlertController
-        alertControllerWithTitle:@"Security Violation"
-        message:@"This app cannot run on a jailbroken device."
-        preferredStyle:UIAlertControllerStyleAlert];
-
-    [alert addAction:[UIAlertAction
-        actionWithTitle:@"Close App"
-        style:UIAlertActionStyleDestructive
-        handler:^(UIAlertAction *action) { exit(0); }]];
-
-    [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
+if result.isJailbroken {
+    print("Trigger: \(result.triggerIdentifier ?? "")")
+    print("Reason: \(result.reason ?? "")")
 }
 ```
+
+### JailbreakCheckResult Properties
+
+| Property | Type | Description |
+|---|---|---|
+| `isJailbroken` | `BOOL` | `YES` if jailbreak was detected |
+| `triggerIdentifier` | `NSString` | Internal identifier of the check that triggered |
+| `reason` | `NSString` | Human-readable description of what was detected |
 
 ---
 
 ## Screen Protection
 
-### Import
+`ScreenProtectionManager` is a singleton that manages screenshot and screen recording protection for your app window.
+
+### Setup
+
+Call this once inside `application:didFinishLaunchingWithOptions:` in your AppDelegate.
+
+**Objective-C:**
 ```objc
-#import "ScreenProtectionManager.h"
+ScreenProtectionManager *manager = [ScreenProtectionManager sharedManager];
+manager.screenshotProtectionEnabled = YES;
+manager.screenRecordingProtectionEnabled = YES;
+[manager setupProtectionForWindow:self.window];
 ```
 
-### Basic Setup (in AppDelegate)
-```objc
-// Both screenshot and recording protection ON by default
-[[ScreenProtectionManager sharedManager] setupProtectionForWindow:self.window];
+**Swift:**
+```swift
+let manager = ScreenProtectionManager.shared()
+manager.screenshotProtectionEnabled = true
+manager.screenRecordingProtectionEnabled = true
+manager.setupProtection(for: window)
 ```
 
-### Custom Configuration
+---
+
+### Individual Toggles
+
+You can enable or disable screenshot and recording protection independently at any time.
+
 ```objc
-ScreenProtectionManager *spm = [ScreenProtectionManager sharedManager];
+// Disable only screenshot protection (allow screenshots)
+manager.screenshotProtectionEnabled = NO;
 
-// Enable/disable individual features
-spm.screenshotProtectionEnabled      = YES;   // blocks screenshots
-spm.screenRecordingProtectionEnabled = YES;   // blocks screen recording
-
-// Custom blocked image (replace with your own)
-spm.blockedImage = [UIImage imageNamed:@"my_blocked_image"];
-
-[spm setupProtectionForWindow:self.window];
+// Keep recording protection active
+manager.screenRecordingProtectionEnabled = YES;
 ```
 
-### Disable Screenshot Protection Only
+---
+
+### Temporary Screenshot Access
+
+Use this when you need to allow a screenshot momentarily — for example, during a user-initiated share flow.
+
 ```objc
-ScreenProtectionManager *spm = [ScreenProtectionManager sharedManager];
-spm.screenshotProtectionEnabled = NO;   // screenshots allowed
-spm.screenRecordingProtectionEnabled = YES; // recording still blocked
-[spm setupProtectionForWindow:self.window];
+// Temporarily allow screenshots
+[manager allowScreenshotTemporarily];
+
+// Re-enable protection after your flow completes
+[manager reEnableScreenshotProtection];
 ```
 
-### Disable Screen Recording Protection Only
-```objc
-ScreenProtectionManager *spm = [ScreenProtectionManager sharedManager];
-spm.screenshotProtectionEnabled = YES;  // screenshots blocked
-spm.screenRecordingProtectionEnabled = NO; // recording allowed
-[spm setupProtectionForWindow:self.window];
-```
-
-### Disable Both (not recommended)
-```objc
-ScreenProtectionManager *spm = [ScreenProtectionManager sharedManager];
-spm.screenshotProtectionEnabled      = NO;
-spm.screenRecordingProtectionEnabled = NO;
-[spm setupProtectionForWindow:self.window];
-```
-
-### Temporarily Allow Screenshot (e.g. for share sheet)
-```objc
-[[ScreenProtectionManager sharedManager] allowScreenshotTemporarily];
-// ... do your share action ...
-[[ScreenProtectionManager sharedManager] reEnableScreenshotProtection];
-```
+---
 
 ### Check if Screen is Being Recorded
+
 ```objc
-if ([[ScreenProtectionManager sharedManager] isScreenBeingRecorded]) {
-    NSLog(@"Screen recording in progress");
+if ([manager isScreenBeingRecorded]) {
+    // Screen recording is active — warn user or restrict content
 }
 ```
 
 ---
 
-## Checks Covered
+### Custom Blocked Image
 
-| # | Check | Source |
-|---|-------|--------|
-| 1 | 70+ jailbreak file paths | CarPro + Bajaj Research |
-| 2 | fopen / stat / access triple check | Bajaj Research |
-| 3 | Sandbox write test | CarPro + Bajaj Research |
-| 4 | /Applications writable | Bajaj Research |
-| 5 | 10+ suspicious URL schemes | CarPro + Bajaj + New |
-| 6 | 30+ suspicious dylib names | Bajaj + New |
-| 7 | DYLD_INSERT_LIBRARIES env | Bajaj Research |
-| 8 | Filesystem mount flags (statvfs/statfs) | Bajaj Research |
-| 9 | Shadow jailbreak bypass (ObjC runtime) | Bajaj Research |
-| 10 | fork() syscall detection | Bajaj Research |
-| 11 | Modern tools: unc0ver, checkra1n, palera1n, Dopamine | **New (Harsh Dwivedi)** |
+You can provide a custom image to display when the screen is protected (instead of a blank screen).
 
----
-
-## Supported Jailbreaks Detected
-
-- Cydia / Sileo / Zebra
-- unc0ver
-- checkra1n
-- palera1n
-- Dopamine
-- Electra
-- Frida / Frida Gadget
-- Shadow bypass
-- TrollStore
-- SSLKillSwitch2
-- FlyJB / ABypass
-
----
-
-## Source Code Protection
-
-To protect your `.m` source files from being seen:
-
-**Option 1 — XCFramework Binary (SPM)**
-Compile to `.xcframework` and distribute via SPM `binaryTarget`.
-Only your `.h` headers are visible. `.m` files are compiled into binary.
-
-**Option 2 — git-crypt (repo-level)**
-```bash
-brew install git-crypt
-git-crypt init
-# Add to .gitattributes:
-*.m filter=git-crypt diff=git-crypt
-*.h filter=git-crypt diff=git-crypt
+```objc
+manager.blockedImage = [UIImage imageNamed:@"screen_protected"];
 ```
-Files are AES-256 encrypted in the repo. Only your machine (with the key) can decrypt.
-
-**Option 3 — Private GitHub Repo + SPM Binary**
-Keep source in a private repo. Only publish the compiled `.xcframework.zip` in a public repo for SPM.
 
 ---
 
-## Screenshot Blocked Image
+## Recommended Integration — AppDelegate
 
-Add an image named `Screenshot_blocked_Image` to your project's `Assets.xcassets`.
-This image appears in saved screenshots and during screen recordings.
+Place all security checks at the earliest possible point in your app lifecycle.
 
-Recommended: A plain screen with your logo and text like:
-> "Screenshot not permitted for security reasons"
+**Objective-C:**
+```objc
+#import <JailbreakShield/JailbreakShield.h>
+
+- (BOOL)application:(UIApplication *)application
+    didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+
+    // Jailbreak check — run first
+    JailbreakCheckResult *result = [DTTJailbreakDetection comprehensiveCheck];
+    if (result.isJailbroken) {
+        UIAlertController *alert = [UIAlertController
+            alertControllerWithTitle:@"Security Alert"
+            message:@"This device is not supported."
+            preferredStyle:UIAlertControllerStyleAlert];
+        // Show alert and prevent app from loading
+        return YES;
+    }
+
+    // Screen protection
+    ScreenProtectionManager *manager = [ScreenProtectionManager sharedManager];
+    manager.screenshotProtectionEnabled = YES;
+    manager.screenRecordingProtectionEnabled = YES;
+    [manager setupProtectionForWindow:self.window];
+
+    return YES;
+}
+```
 
 ---
 
-## Notes
+## Public API Reference
 
-- Simulator always returns `NO` for all jailbreak checks (safe to test in simulator)
-- To test in simulator: temporarily change `TARGET_OS_SIMULATOR == 0` to `TARGET_OS_SIMULATOR == 1`
-- Always revert before App Store submission
-- `fork()` check may cause warnings in some Xcode versions — suppress with `#pragma`
+### DTTJailbreakDetection
+
+| Method | Return Type | Description |
+|---|---|---|
+| `+ isJailbroken` | `BOOL` | Basic jailbreak check |
+| `+ isDeviceJailbroken` | `BOOL` | Alias for `isJailbroken` |
+| `+ comprehensiveCheck` | `JailbreakCheckResult *` | Full multi-layered check with result details |
+
+### JailbreakCheckResult
+
+| Property | Type | Description |
+|---|---|---|
+| `isJailbroken` | `BOOL` | Detection result |
+| `triggerIdentifier` | `NSString *` | Which check triggered |
+| `reason` | `NSString *` | Human-readable reason |
+
+### ScreenProtectionManager
+
+| Method / Property | Type | Description |
+|---|---|---|
+| `+ sharedManager` | `instancetype` | Singleton accessor |
+| `- setupProtectionForWindow:` | `void` | Initialise protection on a window |
+| `screenshotProtectionEnabled` | `BOOL` | Toggle screenshot protection |
+| `screenRecordingProtectionEnabled` | `BOOL` | Toggle recording protection |
+| `- allowScreenshotTemporarily` | `void` | Temporarily lift screenshot block |
+| `- reEnableScreenshotProtection` | `void` | Restore screenshot protection |
+| `- isScreenBeingRecorded` | `BOOL` | Check active recording status |
+| `blockedImage` | `UIImage *` | Custom image shown when blocked |
+
+---
+
+## Privacy
+
+JailbreakShield does not collect, transmit, or store any user data. All checks run entirely on-device. No network requests are made.
 
 ---
 
 ## License
 
-Private — Created by Harsh Dwivedi. All rights reserved.
-Not for redistribution without permission.
+This SDK is proprietary and closed-source. The binary may be integrated into your iOS application. Reverse engineering, redistribution, or modification of the binary is prohibited.
+
+© 2026 Harsh Dwivedi / Emotion Mobility. All rights reserved.
