@@ -13,8 +13,8 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "JailbreakShield",
-            url: "https://github.com/harshd30j-iOS/JailbreakShieldiOS/releases/download/1.5.0/JailbreakShield-1.5.0.zip",
-            checksum: "932665364f3f520d0b2151149e0d22f3a2cbadac473c7b4d1cb158592dc89431"
+            url: "https://github.com/harshd30j-iOS/JailbreakShieldiOS/releases/download/6.1.0/JailbreakShield-6.1.0.zip",
+            checksum: "41ed2223125b0fd46ad084903cef1685101eca06a58bd541e7ff62abffb98661"
         )
     ]
 )
