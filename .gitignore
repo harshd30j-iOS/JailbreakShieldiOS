@@ -1,8 +1,19 @@
-JailbreakShield/*.m
-JailbreakShield/*.h
-JailbreakShield/*.swift
+# Source implementation — hidden from public
+*.m
+*.rb
+
+# Build artifacts
+.build/
 build/
-*.xcarchive
-*.xcframework
 *.zip
-.DS_Store
+*.xcframework
+*.xcarchive
+
+# Xcode project internals
+*.xcodeproj/
+*.xcworkspace/
+*.xcworkspacedata
+DerivedData/
+
+# Swift generated
+JailbreakShieldNew.swift
