@@ -1,0 +1,12 @@
+{
+  "": {
+    "swift-dependencies": "/Users/emotionmobility/Desktop/JailbreakShield/.build/arm64-apple-macosx/debug/JailbreakShield.build/master.swiftdeps"
+  },
+  "/Users/emotionmobility/Desktop/JailbreakShield/Sources/JailbreakShield/JailbreakShield.swift": {
+    "dependencies": "/Users/emotionmobility/Desktop/JailbreakShield/.build/arm64-apple-macosx/debug/JailbreakShield.build/JailbreakShield.d",
+    "object": "/Users/emotionmobility/Desktop/JailbreakShield/.build/arm64-apple-macosx/debug/JailbreakShield.build/JailbreakShield.swift.o",
+    "swiftmodule": "/Users/emotionmobility/Desktop/JailbreakShield/.build/arm64-apple-macosx/debug/JailbreakShield.build/JailbreakShield~partial.swiftmodule",
+    "swift-dependencies": "/Users/emotionmobility/Desktop/JailbreakShield/.build/arm64-apple-macosx/debug/JailbreakShield.build/JailbreakShield.swiftdeps",
+    "diagnostics": "/Users/emotionmobility/Desktop/JailbreakShield/.build/arm64-apple-macosx/debug/JailbreakShield.build/JailbreakShield.dia"
+  }
+}
