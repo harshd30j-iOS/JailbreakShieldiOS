@@ -1,4 +1,5 @@
 // swift-tools-version:5.7
+
 import PackageDescription
 
 let package = Package(
@@ -8,10 +9,15 @@ let package = Package(
         .library(name: "JailbreakShield", targets: ["JailbreakShield"])
     ],
     targets: [
-        .binaryTarget(
+        .target(
+            name: "JailbreakShieldCore",
+            path: "Sources/JailbreakShieldCore",
+            publicHeadersPath: "include"
+        ),
+        .target(
             name: "JailbreakShield",
-            url: "https://github.com/harshd30j-iOS/JailbreakShieldiOS/releases/download/1.3.0/JailbreakShield.xcframework.zip",
-            checksum: "c47c106261eca46647b7e8f4b7badf27e602ef1fac191b4ada73162f4b07a5dc"
+            dependencies: ["JailbreakShieldCore"],
+            path: "Sources/JailbreakShield"
         )
     ]
 )
