@@ -1,0 +1,25 @@
+//
+// ScreenProtectionManager.h
+// JailbreakShield
+//
+// Created by Harsh Dwivedi
+// Copyright © 2026 Harsh Dwivedi. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+NS_ASSUME_NONNULL_BEGIN
+
+@interface ScreenProtectionManager : NSObject
+
++ (instancetype)sharedManager;
+
+@property (nonatomic, assign) BOOL screenshotProtectionEnabled;
+@property (nonatomic, assign) BOOL screenRecordingProtectionEnabled;
+
+- (void)setupProtectionForWindow:(UIWindow *)window;
+- (BOOL)isScreenBeingRecorded;
+
+@end
+
+NS_ASSUME_NONNULL_END
