@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "HDSecurityBlockViewController.h"
+#import <JailbreakShield/HDSecurityBlockViewController.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

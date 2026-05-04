@@ -11,10 +11,11 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, HDBlockReason) {
-    HDBlockReasonJailbreak,
-    HDBlockReasonSimulator,
-    HDBlockReasonDebugger,
-};
+    HDBlockReasonJailbreak,        // Device is jailbroken
+    HDBlockReasonSimulator,        // Running on simulator
+    HDBlockReasonDebugger,         // Debugger attached
+    HDBlockReasonScreenRecording,
+};;
 
 @interface HDSecurityBlockViewController : UIViewController
 

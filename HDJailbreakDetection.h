@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
-#import "HDSecurityBlockViewController.h"
+#import <JailbreakShield/HDSecurityBlockViewController.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -20,16 +20,38 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HDJailbreakDetection : NSObject
 
+// ─────────────────────────────────────────
+// MARK: - Primary Enforcement
+// ─────────────────────────────────────────
+
+/// Blocks jailbreak + simulator + debugger.
+/// Shows built-in block screen with Exit button.
 + (BOOL)enforceSecurityIn:(UIWindow *)window;
+
+/// ★ Auto finds window internally — no parameter needed.
+/// Works in ObjC, Swift, and SwiftUI.
++ (BOOL)enforceSecurity;
+
+/// ★ Attach screenshot + screen recording protection.
+/// Finds the window automatically with retry logic.
+/// Call once at app launch — no window parameter needed.
++ (void)enforceScreenProtection;
+
+// ─────────────────────────────────────────
+// MARK: - Simulator Control
+// ─────────────────────────────────────────
 
 @property (class, nonatomic, assign) BOOL simulatorBypassEnabled;
 + (BOOL)isRunningOnSimulator;
+
+// ─────────────────────────────────────────
+// MARK: - Individual Checks
+// ─────────────────────────────────────────
 
 + (BOOL)isJailbroken;
 + (BOOL)isDeviceJailbroken;
 + (BOOL)hasComprehensiveJailbreakCheck;
 + (JailbreakCheckResult *)comprehensiveCheck;
-
 + (BOOL)hasJailbreakPaths;
 + (BOOL)hasAccessibleJailbreakFiles;
 + (BOOL)canWriteOutsideSandbox;
