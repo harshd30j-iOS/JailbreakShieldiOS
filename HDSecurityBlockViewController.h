@@ -16,7 +16,7 @@ typedef NS_ENUM(NSInteger, HDBlockReason) {
     HDBlockReasonDebugger,         // Debugger attached
     HDBlockReasonScreenRecording,
     HDBlockReasonScreenshot
-};;
+};
 
 @interface HDSecurityBlockViewController : UIViewController
 

@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
            triggerCode:(NSString *)code;
 
 + (BOOL)isActive;
++ (void)dismiss;
 
 @end
 
