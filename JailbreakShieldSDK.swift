@@ -32,7 +32,7 @@ public enum JailbreakShieldSDK {
 
     @discardableResult
     public static func enforce(in window: UIWindow) -> Bool {
-        HDJailbreakDetection.enforceSecurity(in: window)
+        return HDJailbreakDetection.enforceSecurity(in: window)
     }
 
     // MARK: - Individual Checks
