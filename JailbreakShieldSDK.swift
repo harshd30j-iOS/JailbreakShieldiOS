@@ -48,4 +48,8 @@ public enum JailbreakShieldSDK {
     public static var hasJailbreakURLSchemes: Bool{ HDJailbreakDetection.hasSuspiciousURLSchemes() }
     public static var canFork: Bool               { HDJailbreakDetection.canFork() }
     public static var detectionDetails: String    { HDJailbreakDetection.jailbreakDetectionDetails() }
+    public static var debuggerBypassEnabled: Bool {
+        get { HDJailbreakDetection.debuggerBypassEnabled() }
+        set { HDJailbreakDetection.setDebuggerBypassEnabled(newValue) }
+    }
 }

@@ -116,6 +116,11 @@ NS_ASSUME_NONNULL_BEGIN
 /// This is separate from isBeingDebugged — it actively prevents future attachment.
 + (void)denyDebuggerAttach;
 
+#pragma mark - Debugger Bypass
+
++ (BOOL)debuggerBypassEnabled;
++ (void)setDebuggerBypassEnabled:(BOOL)enabled;
+
 @end
 
 NS_ASSUME_NONNULL_END
