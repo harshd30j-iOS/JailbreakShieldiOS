@@ -118,8 +118,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Debugger Bypass
 
-+ (BOOL)debuggerBypassEnabled;
-+ (void)setDebuggerBypassEnabled:(BOOL)enabled;
+@property (class, nonatomic) BOOL debuggerBypassEnabled;
+
 
 @end
 
