@@ -11,11 +11,10 @@ import UIKit
 public enum JailbreakShieldSDK {
 
     // MARK: - Simulator Bypass
-
-    public static var simulatorBypassEnabled: Bool {
-        get { HDJailbreakDetection.simulatorBypassEnabled }
-        set { HDJailbreakDetection.simulatorBypassEnabled = newValue }
-    }
+        public static var simulatorBypassEnabled: Bool {
+            get { HDJailbreakDetection.simulatorBypassEnabled }
+            set { HDJailbreakDetection.simulatorBypassEnabled = newValue }
+        }
 
     // MARK: - Primary Enforcement
 
@@ -48,8 +47,21 @@ public enum JailbreakShieldSDK {
     public static var hasJailbreakURLSchemes: Bool{ HDJailbreakDetection.hasSuspiciousURLSchemes() }
     public static var canFork: Bool               { HDJailbreakDetection.canFork() }
     public static var detectionDetails: String    { HDJailbreakDetection.jailbreakDetectionDetails() }
-    public static var debuggerBypassEnabled: Bool {
-        get { HDJailbreakDetection.debuggerBypassEnabled }
-        set { HDJailbreakDetection.debuggerBypassEnabled = newValue }
-    }
+    
+    // MARK: - Debugger Bypass
+        public static var debuggerBypassEnabled: Bool {
+            get { HDJailbreakDetection.debuggerBypassEnabled }
+            set { HDJailbreakDetection.debuggerBypassEnabled = newValue }
+        }
 }
+
+/// 10/10 FIX: Added 'public' so your whole project can see it.
+/// Added 'items: Any...' so it works exactly like the standard print() function.
+public func JSLog(_ items: Any..., separator: String = " ", terminator: String = "\n") {
+    #if DEBUG
+    // Only works in Debug mode
+    let output = items.map { "\($0)" }.joined(separator: separator)
+    Swift.print(output, terminator: terminator)
+    #endif
+}
+

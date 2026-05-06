@@ -2,9 +2,6 @@
 // HDSecurityBlockWindow.h
 // JailbreakShield
 //
-// Created by Harsh Dwivedi
-// Copyright © 2026 Harsh Dwivedi. All rights reserved.
-//
 
 #import <UIKit/UIKit.h>
 #import <JailbreakShield/HDSecurityBlockViewController.h>
@@ -19,6 +16,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (BOOL)isActive;
 + (void)dismiss;
++ (void)show;
+
+// FIX: Exposes the reason so dismissing CarPlay/AirPlay doesn't override actual jailbreak blocks
++ (HDBlockReason)activeBlockReason;
 
 @end
 

@@ -11,6 +11,11 @@
 //   SSH port probe, csops entitlement, binary integrity, and more.
 //
 
+//
+// HDJailbreakDetection.h
+// JailbreakShield
+//
+
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 #import <JailbreakShield/HDSecurityBlockViewController.h>
@@ -39,10 +44,12 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)enforceScreenProtection;
 
 // ─────────────────────────────────────────
-// MARK: - Simulator Control
+// MARK: - Bypasses for Testing
 // ─────────────────────────────────────────
-
+// Swift will read both of these perfectly now!
 @property (class, nonatomic, assign) BOOL simulatorBypassEnabled;
+@property (class, nonatomic, assign) BOOL debuggerBypassEnabled;
+
 + (BOOL)isRunningOnSimulator;
 
 // ─────────────────────────────────────────
@@ -70,56 +77,24 @@ NS_ASSUME_NONNULL_BEGIN
 // MARK: - New Checks (v6.3.0)
 // ─────────────────────────────────────────
 
-/// Detect Frida server listening on default port 27042 or fallback 27043.
 + (BOOL)hasFridaServerRunning;
-
-/// Detect Frida gadget / agent patterns beyond simple dylib name matching.
 + (BOOL)hasFridaGadgetSignature;
-
-/// Detect RootHide-style rootless jailbreaks (/var/jb based).
 + (BOOL)hasRootHideIndicators;
-
-/// Detect TrollStore and related app sideloading tools.
 + (BOOL)hasTrollStoreIndicators;
-
-/// Check /etc/fstab, /etc/hosts, /var/lib/dpkg for suspicious symlinks.
 + (BOOL)hasJailbreakSymlinks;
-
-/// Detect suspicious parent process (frida-server, gdb, lldb, cycript).
 + (BOOL)hasSuspiciousParentProcess;
-
-/// Timing anomaly: bypass tools like Frida inject hooks that add micro-delays.
 + (BOOL)hasHookingTimingAnomaly;
-
-/// Mach exception port check: a debugger sets task exception ports.
 + (BOOL)hasMachExceptionPortsSet;
-
-/// Check for SSH daemon running locally on port 22 (jailbreak indicator).
++ (BOOL)hasTamperedHostsFile;
++ (BOOL)hasValidBundleIdentifier;
 + (BOOL)hasSSHDaemonRunning;
-
-/// Detect csops get-task-allow entitlement (set when app is re-signed for debug).
 + (BOOL)hasDebugEntitlementSet;
-
-/// Detect if /System/Library frameworks are missing or abnormal (jailbreak tampering).
 + (BOOL)hasSystemFrameworkAnomaly;
-
-/// Detect Dopamine, Checkra1n, unc0ver, Electra via unique file fingerprints.
 + (BOOL)hasModernJailbreakFingerprints;
-
-/// Check for objection / cycript / LLDB process names in running process list.
 + (BOOL)hasAnalysisToolsRunning;
-
-/// Check that the app binary has not been tampered with (basic Mach-O header verify).
 + (BOOL)hasModifiedBinary;
-
-/// Deny debugger attach using PT_DENY_ATTACH (call once, early at launch).
-/// This is separate from isBeingDebugged — it actively prevents future attachment.
 + (void)denyDebuggerAttach;
-
-#pragma mark - Debugger Bypass
-
-@property (class, nonatomic) BOOL debuggerBypassEnabled;
-
++ (void)enforceLogSuppression;
 
 @end
 
