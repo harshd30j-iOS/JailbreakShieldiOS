@@ -1,8 +1,3 @@
-//
-//  JailbreakShieldSDK.swift
-//  JailbreakShield
-//
-
 import UIKit
 
 public enum JailbreakShieldSDK {
@@ -18,8 +13,8 @@ public enum JailbreakShieldSDK {
     }
 
     public static var onDetection: ((String, String) -> Void)? {
-        get { HDJailbreakDetection.onDetection }
-        set { HDJailbreakDetection.onDetection = newValue }
+        get { HDJailbreakDetection.onDetectionHandler() }
+        set { HDJailbreakDetection.setOnDetectionHandler(newValue) }
     }
 
     @discardableResult
