@@ -49,6 +49,10 @@ NS_ASSUME_NONNULL_BEGIN
 // Swift will read both of these perfectly now!
 @property (class, nonatomic, assign) BOOL simulatorBypassEnabled;
 @property (class, nonatomic, assign) BOOL debuggerBypassEnabled;
+// FIX: Added callback property so host apps receive detection events for analytics/logging.
+// Swift: HDJailbreakDetection.onDetection = { id, reason in ... }
+@property (class, nonatomic, copy, nullable)
+    void(^onDetection)(NSString *triggerIdentifier, NSString *reason);
 
 + (BOOL)isRunningOnSimulator;
 

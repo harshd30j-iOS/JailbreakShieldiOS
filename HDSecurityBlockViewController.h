@@ -1,21 +1,14 @@
-//
-// HDSecurityBlockViewController.h
-// JailbreakShield
-//
-// Created by Harsh Dwivedi
-// Copyright © 2026 Harsh Dwivedi. All rights reserved.
-//
-
 #import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, HDBlockReason) {
-    HDBlockReasonJailbreak,        // Device is jailbroken
-    HDBlockReasonSimulator,        // Running on simulator
-    HDBlockReasonDebugger,         // Debugger attached
-    HDBlockReasonScreenRecording,
-    HDBlockReasonScreenshot
+    HDBlockReasonNone = -1,
+    HDBlockReasonJailbreak = 0,
+    HDBlockReasonSimulator = 1,
+    HDBlockReasonDebugger = 2,
+    HDBlockReasonScreenRecording = 3,
+    HDBlockReasonScreenshot = 4,
 };
 
 @interface HDSecurityBlockViewController : UIViewController
