@@ -4,7 +4,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ScreenProtectionManager : NSObject
 
-+ (instancetype)sharedManager NS_SWIFT_NAME(shared);
++ (instancetype)sharedManager NS_SWIFT_NAME(shared());
 
 @property (nonatomic, assign) BOOL screenshotProtectionEnabled;
 @property (nonatomic, assign) BOOL screenRecordingProtectionEnabled;
