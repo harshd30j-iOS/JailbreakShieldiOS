@@ -7,7 +7,7 @@ Detects 30+ jailbreak indicators including Frida, TrollStore, RootHide, Dopamine
 
 1. In Xcode go to **File → Add Package Dependencies**
 2. Paste URL: `https://github.com/harshd30j-iOS/JailbreakShieldiOS`
-3. Change dropdown to **Exact Version** → type `1.1.1`
+3. Change dropdown to **Exact Version** → type `1.1.2`
 4. Click **Add Package**
 5. In Build Settings add Other Linker Flags: `-ObjC`
 
