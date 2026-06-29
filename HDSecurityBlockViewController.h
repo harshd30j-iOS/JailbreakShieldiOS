@@ -11,12 +11,14 @@ typedef NS_ENUM(NSInteger, HDBlockReason) {
     HDBlockReasonScreenshot = 4,
 };
 
-@interface HDSecurityBlockViewController : UIViewController
+@interface HDS_c3 : UIViewController
 
 @property (nonatomic, assign) HDBlockReason blockReason;
 @property (nonatomic, copy) NSString *detailMessage;
 @property (nonatomic, copy) NSString *triggerCode;
 
 @end
+
+@compatibility_alias HDSecurityBlockViewController HDS_c3;
 
 NS_ASSUME_NONNULL_END

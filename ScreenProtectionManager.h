@@ -2,12 +2,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ScreenProtectionManager : NSObject
-
-+ (instancetype)sharedManager NS_SWIFT_NAME(shared());
+@interface HDS_c4 : NSObject
 
 @property (nonatomic, assign) BOOL screenshotProtectionEnabled;
 @property (nonatomic, assign) BOOL screenRecordingProtectionEnabled;
+@property (nonatomic, copy, nullable) NSString *customScreenRecordingMessage;
+@property (nonatomic, copy, nullable) NSString *customScreenshotMessage;
+
++ (instancetype)sharedManager NS_SWIFT_NAME(shared());
 
 - (void)setupProtectionForWindow:(UIWindow *)window
     NS_SWIFT_NAME(setupProtection(for:));
@@ -20,5 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)isScreenBeingRecorded;
 
 @end
+
+@compatibility_alias ScreenProtectionManager HDS_c4;
 
 NS_ASSUME_NONNULL_END

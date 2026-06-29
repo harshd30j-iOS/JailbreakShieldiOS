@@ -3,7 +3,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface HDSecurityBlockWindow : UIWindow
+@interface HDS_c2 : UIWindow
 
 + (void)showWithReason:(HDBlockReason)reason
                message:(NSString *)message
@@ -15,5 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (HDBlockReason)activeBlockReason;
 
 @end
+
+@compatibility_alias HDSecurityBlockWindow HDS_c2;
 
 NS_ASSUME_NONNULL_END
